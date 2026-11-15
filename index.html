@@ -197,21 +197,12 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       color: #fff;
       text-decoration: none;
-      font-size: 15px;
+      font-size: 16px;
       letter-spacing: -0.01em;
       white-space: nowrap;
-      flex: none;
-    }
-
-    .logo-mark {
-      width: 20px;
-      height: 40px;
-      background: #fff;
-      border-radius: 0 20px 20px 0;
-      display: inline-block;
       flex: none;
     }
 
@@ -486,8 +477,8 @@
     .cta-row {
       position: absolute;
       left: 45.6%;
-      right: -1vw;
-      top: 88.7%;
+      right: var(--pad-x);
+      top: 86%;
       transform: translateY(-50%);
       display: flex;
       align-items: center;
@@ -544,18 +535,18 @@
       flex: 1;
       height: 1.5px;
       background: rgba(255, 255, 255, 0.8);
-      min-width: 40px;
+      min-width: 24px;
     }
 
     .count {
       flex: none;
-      font-size: clamp(140px, 19.8vw, 360px);
+      font-size: clamp(110px, 14vw, 220px);
       font-weight: 400;
-      line-height: 1;
+      line-height: 0.95;
       letter-spacing: -0.02em;
       color: transparent;
       -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.9);
-      transform: translateY(6%);
+      padding-right: 4px;
       user-select: none;
     }
 
@@ -631,9 +622,9 @@
 
       .cta-row {
         left: var(--pad-x);
-        right: -3vw;
+        right: var(--pad-x);
         top: auto;
-        bottom: 18px;
+        bottom: 20px;
         transform: none;
       }
 
@@ -643,8 +634,12 @@
         font-size: 13px;
       }
 
+      .cta-line {
+        min-width: 16px;
+      }
+
       .count {
-        font-size: clamp(88px, 21vw, 150px);
+        font-size: clamp(72px, 18vw, 130px);
       }
     }
 
@@ -653,14 +648,9 @@
         top: 20px;
       }
 
-      .logo-mark {
-        width: 16px;
-        height: 32px;
-      }
-
       .logo {
-        font-size: 14px;
-        gap: 8px;
+        font-size: 15px;
+        gap: 5px;
       }
 
       .nav-right {
@@ -682,12 +672,12 @@
       }
 
       .cta-row {
-        right: -5vw;
-        bottom: 14px;
+        right: var(--pad-x);
+        bottom: 18px;
       }
 
       .count {
-        font-size: clamp(82px, 22vw, 118px);
+        font-size: clamp(64px, 16vw, 96px);
       }
     }
 
@@ -1466,7 +1456,6 @@
 
       <header class="nav">
         <a href="#hero" class="logo">
-          <i class="logo-mark" aria-hidden="true"></i>
           <b>Muhammad</b><span>Saad</span>
         </a>
         <div class="nav-right">
@@ -2197,11 +2186,11 @@
       const mobile = viewW <= 900 || viewW / viewH < 1;
       const lines = HERO_SLIDES[currentSlide].lines;
       let fs = mobile
-        ? Math.min(viewH * 0.13, viewW * 0.165)
+        ? Math.min(viewH * 0.165, viewW * 0.205)
         : Math.min(viewH * 0.21, viewW * 0.118);
       textCtx.font = `800 ${fs}px Poppins, sans-serif`;
 
-      const maxLineW = viewW * (mobile ? 0.78 : 0.5);
+      const maxLineW = viewW * (mobile ? 0.85 : 0.5);
       let widest = 0;
       for (const line of lines) {
         const w = textCtx.measureText(line).width;
@@ -2258,7 +2247,7 @@
       pivot.position.set((sx - 0.5) * visW, (0.5 - sy) * visH, 0);
 
       const px = mobile
-        ? Math.min(viewH * 0.28, viewW * 0.42)
+        ? Math.min(viewH * 0.26, viewW * 0.38)
         : Math.min(viewH * 0.44, viewW * 0.29);
       pivot.scale.setScalar((px / viewH) * visH);
 
@@ -2450,9 +2439,17 @@
     }
 
     window.addEventListener('resize', layout);
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(layout).observe(document.getElementById('hero'));
+    }
     if (document.fonts && typeof document.fonts.addEventListener === 'function') {
       document.fonts.addEventListener('loadingdone', drawHeadline);
     }
+
+    layout();
+    loadCubeModel();
+    lastFrameTime = performance.now();
+    tick(lastFrameTime);
 
     const fontReadyPromise = document.fonts
       ? Promise.all([document.fonts.load('800 100px Poppins'), document.fonts.ready])
@@ -2462,10 +2459,7 @@
       fontReadyPromise,
       new Promise((resolve) => setTimeout(resolve, 2500))
     ]).then(() => {
-      layout();
-      loadCubeModel();
-      lastFrameTime = performance.now();
-      tick(lastFrameTime);
+      drawHeadline();
     });
 
     /* ==================================================
