@@ -460,8 +460,25 @@
     .tagline-wrap {
       position: absolute;
       left: var(--pad-x);
-      bottom: clamp(40px, 7.5vh, 70px);
-      max-width: min(460px, 42vw);
+      bottom: clamp(24px, 4.2vh, 48px);
+      max-width: min(390px, 34vw);
+      z-index: 2;
+      isolation: isolate;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.96), 0 0 26px rgba(0, 0, 0, 0.92);
+    }
+
+    .tagline-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -20px -28px -18px -24px;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse at 36% 56%,
+        rgba(0, 0, 0, 0.94) 0%,
+        rgba(0, 0, 0, 0.74) 54%,
+        rgba(0, 0, 0, 0) 100%
+      );
     }
 
     .tagline-eyebrow {
@@ -469,15 +486,16 @@
       font-weight: 500;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.72);
+      color: rgba(255, 255, 255, 0.86);
       margin-bottom: 8px;
     }
 
     .tagline {
-      font-size: clamp(22px, 2.55vw, 42px);
+      font-size: clamp(20px, 2.05vw, 34px);
       line-height: 1.2;
       font-weight: 300;
       letter-spacing: -0.01em;
+      color: #ffffff;
     }
 
     .tagline strong {
@@ -796,7 +814,7 @@
       }
 
       .dots {
-        top: 36%;
+        top: 31.5%;
         gap: 20px;
         right: 14px;
       }
@@ -807,10 +825,10 @@
       }
 
       .tagline-wrap {
-        bottom: clamp(102px, 15vh, 146px);
+        bottom: clamp(86px, 13vh, 128px);
         left: var(--pad-x);
         right: var(--pad-x);
-        max-width: 540px;
+        max-width: 520px;
       }
 
       .tagline-eyebrow {
@@ -2480,11 +2498,11 @@
       const mobile = viewW <= 900 || viewW / viewH < 1;
       const lines = HERO_SLIDES[currentSlide].lines;
       let fs = mobile
-        ? Math.min(viewH * 0.165, viewW * 0.205)
-        : Math.min(viewH * 0.21, viewW * 0.118);
+        ? Math.min(viewH * 0.138, viewW * 0.188)
+        : Math.min(viewH * 0.175, viewW * 0.105);
       textCtx.font = `800 ${fs}px Poppins, sans-serif`;
 
-      const maxLineW = viewW * (mobile ? 0.85 : 0.5);
+      const maxLineW = viewW * (mobile ? 0.84 : 0.46);
       let widest = 0;
       for (const line of lines) {
         const w = textCtx.measureText(line).width;
@@ -2500,7 +2518,7 @@
       textCtx.textBaseline = 'alphabetic';
 
       const cx = viewW * (mobile ? 0.48 : 0.505);
-      const cy = viewH * (mobile ? 0.36 : 0.468);
+      const cy = viewH * (mobile ? 0.305 : 0.405);
       const gap = fs * 1.07;
       const cap = fs * 0.7;
 
@@ -2537,12 +2555,12 @@
       const visH = 2 * Math.tan(THREE.MathUtils.degToRad(30) / 2) * 10;
       const visW = visH * aspect;
       const sx = mobile ? 0.48 : 0.517;
-      const sy = mobile ? 0.36 : 0.488;
+      const sy = mobile ? 0.315 : 0.42;
       pivot.position.set((sx - 0.5) * visW, (0.5 - sy) * visH, 0);
 
       const px = mobile
-        ? Math.min(viewH * 0.26, viewW * 0.38)
-        : Math.min(viewH * 0.44, viewW * 0.29);
+        ? Math.min(viewH * 0.24, viewW * 0.36)
+        : Math.min(viewH * 0.41, viewW * 0.27);
       pivot.scale.setScalar((px / viewH) * visH);
 
       drawHeadline();
