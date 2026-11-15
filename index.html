@@ -11,6 +11,10 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin />
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" />
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/geometries/RoundedBoxGeometry.js" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <script type="importmap">
   {
@@ -40,7 +44,6 @@
     }
 
     html {
-      scroll-behavior: smooth;
       background: var(--bg);
       color: var(--fg);
       font-family: 'Poppins', sans-serif;
@@ -2167,7 +2170,7 @@
     const preloaderPercentEl = document.getElementById('preloader-percent-label');
     const preloaderStatusEl = document.getElementById('preloader-status');
 
-    let preloaderTarget = 22;
+    let preloaderTarget = 45;
     let preloaderCurrent = 0;
     let cubeReady = false;
     let fontsReady = false;
@@ -2182,12 +2185,12 @@
 
     function stepPreloader() {
       if (preloaderClosed) return;
-      const readyToComplete = (cubeReady && fontsReady) || performance.now() - preloaderStart > 2600;
+      const readyToComplete = (cubeReady && fontsReady) || performance.now() - preloaderStart > 900;
       if (readyToComplete) preloaderTarget = 100;
 
       const diff = preloaderTarget - preloaderCurrent;
-      preloaderCurrent += Math.max(diff * 0.14, preloaderTarget > preloaderCurrent ? 0.8 : 0);
-      if (preloaderCurrent > 99.6 && preloaderTarget >= 100) preloaderCurrent = 100;
+      preloaderCurrent += Math.max(diff * 0.24, preloaderTarget > preloaderCurrent ? 2.4 : 0);
+      if (preloaderCurrent > 99.4 && preloaderTarget >= 100) preloaderCurrent = 100;
 
       const display = Math.min(100, Math.round(preloaderCurrent));
       const padded = display < 10 ? `0${display}` : String(display);
@@ -2197,7 +2200,7 @@
 
       if (display >= 100) {
         preloaderStatusEl.textContent = 'System Ready';
-        setTimeout(closePreloader, 180);
+        setTimeout(closePreloader, 110);
         return;
       }
       requestAnimationFrame(stepPreloader);
@@ -2438,6 +2441,10 @@
     }
 
     function loadCubeModel() {
+      // Mount procedural glass cuboid immediately on frame 0 so hero is never blocked
+      setCubeGeometry(new RoundedBoxGeometry(1, 1, 1, 10, 0.14));
+
+      // Optionally refine with external GLB mesh in background once downloaded
       const gltfLoader = new GLTFLoader();
       gltfLoader.load(
         MODEL_URL,
@@ -2458,24 +2465,15 @@
             });
             if (parts.length > 0) {
               const merged = parts.length === 1 ? parts[0] : mergeGeometries(parts, false);
-              if (merged) {
-                setCubeGeometry(merged);
-                return;
-              }
+              if (merged) setCubeGeometry(merged);
             }
-            setCubeGeometry(new RoundedBoxGeometry(1, 1, 1, 8, 0.12));
           } catch {
-            setCubeGeometry(new RoundedBoxGeometry(1, 1, 1, 8, 0.12));
+            // Keep instant procedural rounded cuboid
           }
         },
-        (evt) => {
-          if (evt && evt.lengthComputable && evt.total > 0) {
-            const pct = 25 + Math.round((evt.loaded / evt.total) * 55);
-            preloaderTarget = Math.max(preloaderTarget, Math.min(82, pct));
-          }
-        },
+        undefined,
         () => {
-          setCubeGeometry(new RoundedBoxGeometry(1, 1, 1, 8, 0.12));
+          // Keep instant procedural rounded cuboid
         }
       );
     }
@@ -2775,10 +2773,10 @@
 
     Promise.race([
       fontReadyPromise,
-      new Promise((resolve) => setTimeout(resolve, 2500))
+      new Promise((resolve) => setTimeout(resolve, 700))
     ]).then(() => {
       fontsReady = true;
-      preloaderTarget = Math.max(preloaderTarget, 94);
+      preloaderTarget = Math.max(preloaderTarget, 96);
       drawHeadline();
     });
 
@@ -2806,19 +2804,19 @@
           {
             label: 'Screenshot 1',
             caption: 'Multi-calendar GoHighLevel Call Booking Tracker workflow',
-            src: '/assets/docs/image_bfc09c1a.png',
+            src: '/assets/docs/image_bfc09c1a.webp',
             alt: 'Automated Call Booking Tracker screenshot 1'
           },
           {
             label: 'Thumbnail 1',
             caption: 'Find & Update Spreadsheet Row using Lookup actions',
-            src: '/assets/docs/image_52bb36cc.png',
+            src: '/assets/docs/image_52bb36cc.webp',
             alt: 'Automated Call Booking Tracker thumbnail 1'
           },
           {
             label: 'Thumbnail 2',
             caption: 'Centralized Google Sheets Booking Tracker log',
-            src: '/assets/docs/image_06436e11.png',
+            src: '/assets/docs/image_06436e11.webp',
             alt: 'Automated Call Booking Tracker thumbnail 2'
           }
         ]
@@ -2843,7 +2841,7 @@
           {
             label: 'Screenshot 1',
             caption: 'Appointment Confirmation + Reminder multi-calendar workflow',
-            src: '/assets/docs/image_03960369.png',
+            src: '/assets/docs/image_03960369.webp',
             alt: 'Appointment Confirmation & Reminder Automation screenshot 1'
           }
         ]
@@ -2868,13 +2866,13 @@
           {
             label: 'Screenshot 1',
             caption: 'Conditional lead attribution routing workflow in GoHighLevel',
-            src: '/assets/docs/image_8aade0eb.png',
+            src: '/assets/docs/image_8aade0eb.webp',
             alt: 'Lead Attribution & Reporting Automation screenshot 1'
           },
           {
             label: 'Thumbnail 1',
             caption: 'Organic Tracking Dashboard synchronized in Google Sheets',
-            src: '/assets/docs/image_61e6cc91.png',
+            src: '/assets/docs/image_61e6cc91.webp',
             alt: 'Lead Attribution & Reporting Automation thumbnail 1'
           }
         ]
@@ -2903,13 +2901,13 @@
           {
             label: 'Screenshot 1',
             caption: 'Multi-country n8n scraping, deduplication & alert workflow',
-            src: '/assets/docs/image_ea1b7f6b.png',
+            src: '/assets/docs/image_ea1b7f6b.webp',
             alt: 'Global Job Monitoring & Alert Automation screenshot 1'
           },
           {
             label: 'Thumbnail 1',
             caption: 'Automated Gmail job alert delivered from n8n pipeline',
-            src: '/assets/docs/image_e4ad2786.png',
+            src: '/assets/docs/image_e4ad2786.webp',
             alt: 'Global Job Monitoring & Alert Automation thumbnail 1'
           }
         ]
@@ -2934,13 +2932,13 @@
           {
             label: 'Screenshot 1',
             caption: 'Looker Studio Sales Performance & Setter Analytics dashboard',
-            src: '/assets/docs/image_ac865d5e.png',
+            src: '/assets/docs/image_ac865d5e.webp',
             alt: 'Sales Performance & Team Analytics Dashboard screenshot 1'
           },
           {
             label: 'Thumbnail 1',
             caption: 'Closer Activity, Show Rate & Close Rate analytics view',
-            src: '/assets/docs/image_18dcf283.png',
+            src: '/assets/docs/image_18dcf283.webp',
             alt: 'Sales Performance & Team Analytics Dashboard thumbnail 1'
           }
         ]
@@ -2965,7 +2963,7 @@
           {
             label: 'Screenshot 1',
             caption: 'Executive Sales Overview & Cash Collection Looker Studio dashboard',
-            src: '/assets/docs/image_905edf78.png',
+            src: '/assets/docs/image_905edf78.webp',
             alt: 'Revenue & Financial Performance Dashboard screenshot 1'
           }
         ]
@@ -2982,7 +2980,7 @@
         ? `<div class="preview-thumbs">
             ${cs.previews.map((item, idx) => `
               <button type="button" class="thumb-btn ${idx === previewIdx ? 'active' : ''}" data-case="${cs.id}" data-preview="${idx}" aria-label="${item.alt}">
-                <img src="${item.src}" alt="${item.alt}" loading="lazy" />
+                <img src="${item.src}" alt="${item.alt}" loading="eager" decoding="async" />
               </button>
             `).join('')}
           </div>`
@@ -2994,7 +2992,7 @@
           <span>Case Study ${cs.id}</span>
         </div>
         <div class="preview-stage">
-          <img class="preview-img open-overview-img" data-case="${cs.id}" src="${p.src}" alt="${p.alt}" loading="lazy" />
+          <img class="preview-img open-overview-img" data-case="${cs.id}" src="${p.src}" alt="${p.alt}" loading="eager" decoding="async" />
         </div>
         <div class="preview-caption">
           <span>${p.caption}</span>
@@ -3047,6 +3045,20 @@
     }
 
     renderCases();
+
+    /* Preload & decode all project WebP images immediately for zero-lag switching */
+    (function preloadCaseImages() {
+      for (const cs of CASE_STUDIES) {
+        for (const preview of cs.previews) {
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = preview.src;
+          if (typeof img.decode === 'function') {
+            img.decode().catch(() => {});
+          }
+        }
+      }
+    })();
 
     /* Thumbnail switching inside Case Studies */
     casesListEl.addEventListener('click', (e) => {
@@ -3175,6 +3187,97 @@
         copyEmailBtn.textContent = 'saadmuhammad679@gmail.com';
       }
     });
+
+    /* Silky inertia smooth scrolling across the entire website */
+    (function initSmoothScroll() {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let targetY = window.scrollY;
+      let currentY = window.scrollY;
+      let scrollRaf = 0;
+      let isAnimatingScroll = false;
+      let lastScrollTs = performance.now();
+
+      function maxScrollY() {
+        return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      }
+
+      function scrollLoop(now) {
+        const dt = Math.min(0.05, Math.max(0.001, (now - lastScrollTs) * 0.001));
+        lastScrollTs = now;
+        const factor = 1 - Math.pow(0.86, dt * 60);
+        currentY += (targetY - currentY) * factor;
+
+        if (Math.abs(targetY - currentY) < 0.6) {
+          currentY = targetY;
+          window.scrollTo(0, currentY);
+          isAnimatingScroll = false;
+          scrollRaf = 0;
+          return;
+        }
+
+        window.scrollTo(0, currentY);
+        scrollRaf = requestAnimationFrame(scrollLoop);
+      }
+
+      function scrollToTarget(nextY) {
+        const clamped = Math.max(0, Math.min(maxScrollY(), nextY));
+        if (prefersReduced) {
+          window.scrollTo(0, clamped);
+          targetY = currentY = clamped;
+          return;
+        }
+        targetY = clamped;
+        if (!isAnimatingScroll) {
+          currentY = window.scrollY;
+          isAnimatingScroll = true;
+          lastScrollTs = performance.now();
+          scrollRaf = requestAnimationFrame(scrollLoop);
+        }
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!isAnimatingScroll) {
+          targetY = window.scrollY;
+          currentY = window.scrollY;
+        }
+      }, { passive: true });
+
+      window.addEventListener('wheel', (e) => {
+        if (prefersReduced || e.ctrlKey) return;
+        if (modal.classList.contains('open') || mobileMenu.classList.contains('open')) return;
+        if (e.target && e.target.closest && e.target.closest('.modal-panel')) return;
+
+        e.preventDefault();
+        let dy = e.deltaY;
+        if (e.deltaMode === 1) dy *= 34;
+        else if (e.deltaMode === 2) dy *= window.innerHeight * 0.85;
+
+        scrollToTarget(targetY + dy);
+      }, { passive: false });
+
+      document.addEventListener('click', (e) => {
+        const link = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+        if (!link) return;
+        const hash = link.getAttribute('href');
+        if (!hash || hash === '#') return;
+        const dest = document.querySelector(hash);
+        if (!dest) return;
+
+        e.preventDefault();
+        const navOffset = hash === '#hero' ? 0 : 76;
+        const destTop = dest.getBoundingClientRect().top + window.scrollY - navOffset;
+        scrollToTarget(destTop);
+        if (history && typeof history.replaceState === 'function') {
+          history.replaceState(null, '', hash);
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        const max = maxScrollY();
+        if (targetY > max) targetY = max;
+        if (currentY > max) currentY = max;
+      });
+    })();
   </script>
   <script>
     /* Fail-safe preloader dismiss if external module script stalls */
