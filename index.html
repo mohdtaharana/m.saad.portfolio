@@ -562,21 +562,213 @@
       user-select: none;
     }
 
-    .loader {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      opacity: 0.6;
-      transition: opacity 0.6s;
+    /* ==================================================
+       PRELOADER (3D CHROMATIC GLASS + EDITORIAL COUNTER)
+       ================================================== */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: #000000;
+      color: #ffffff;
+      padding: clamp(24px, 4.5vh, 42px) var(--pad-x);
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      transition:
+        opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.65s;
+    }
+
+    .preloader.is-done {
+      opacity: 0;
+      transform: translateY(-16px);
+      visibility: hidden;
       pointer-events: none;
     }
 
-    .loader.done {
-      opacity: 0;
+    .preloader-inner {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .preloader-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .preloader-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: clamp(18px, 1.8vw, 22px);
+      letter-spacing: -0.02em;
+    }
+
+    .preloader-brand b {
+      font-weight: 700;
+    }
+
+    .preloader-brand span {
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .preloader-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.56);
+    }
+
+    .preloader-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin: auto 0;
+    }
+
+    .preloader-cube-stage {
+      width: 68px;
+      height: 68px;
+      perspective: 620px;
+      display: grid;
+      place-items: center;
+    }
+
+    .preloader-cube {
+      width: 52px;
+      height: 52px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: preloaderSpin 3.6s linear infinite;
+    }
+
+    .preloader-cube .face {
+      position: absolute;
+      inset: 0;
+      border-radius: 7px;
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      background: linear-gradient(
+        135deg,
+        rgba(170, 218, 255, 0.16) 0%,
+        rgba(255, 255, 255, 0.05) 48%,
+        rgba(255, 224, 170, 0.18) 100%
+      );
+      box-shadow:
+        inset 0 0 12px rgba(170, 218, 255, 0.24),
+        0 0 18px rgba(255, 255, 255, 0.08);
+    }
+
+    .preloader-cube .front  { transform: translateZ(26px); }
+    .preloader-cube .back   { transform: rotateY(180deg) translateZ(26px); }
+    .preloader-cube .right  { transform: rotateY(90deg) translateZ(26px); }
+    .preloader-cube .left   { transform: rotateY(-90deg) translateZ(26px); }
+    .preloader-cube .top    { transform: rotateX(90deg) translateZ(26px); }
+    .preloader-cube .bottom { transform: rotateX(-90deg) translateZ(26px); }
+
+    @keyframes preloaderSpin {
+      0% {
+        transform: rotateX(-24deg) rotateY(22deg) rotateZ(0deg);
+      }
+      50% {
+        transform: rotateX(24deg) rotateY(202deg) rotateZ(12deg);
+      }
+      100% {
+        transform: rotateX(-24deg) rotateY(382deg) rotateZ(0deg);
+      }
+    }
+
+    .preloader-caption {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.68);
+      text-align: center;
+    }
+
+    .preloader-bottom {
+      display: grid;
+      gap: 14px;
+    }
+
+    .preloader-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.64);
+    }
+
+    .preloader-track {
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .preloader-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        rgba(170, 218, 255, 0.85) 0%,
+        #ffffff 50%,
+        rgba(255, 224, 170, 0.9) 100%
+      );
+      box-shadow: 0 0 12px rgba(170, 218, 255, 0.65);
+      transition: width 0.12s linear;
+    }
+
+    .preloader-count {
+      font-size: clamp(64px, 11vw, 136px);
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.88);
+      text-align: right;
+      user-select: none;
+    }
+
+    @media (max-width: 768px) {
+      .preloader-cube-stage {
+        width: 56px;
+        height: 56px;
+      }
+
+      .preloader-cube {
+        width: 44px;
+        height: 44px;
+      }
+
+      .preloader-cube .front  { transform: translateZ(22px); }
+      .preloader-cube .back   { transform: rotateY(180deg) translateZ(22px); }
+      .preloader-cube .right  { transform: rotateY(90deg) translateZ(22px); }
+      .preloader-cube .left   { transform: rotateY(-90deg) translateZ(22px); }
+      .preloader-cube .top    { transform: rotateX(90deg) translateZ(22px); }
+      .preloader-cube .bottom { transform: rotateX(-90deg) translateZ(22px); }
+
+      .preloader-count {
+        font-size: clamp(56px, 16vw, 88px);
+      }
     }
 
     @media (max-width: 900px), (max-aspect-ratio: 1/1) {
@@ -1466,6 +1658,40 @@
   </style>
 </head>
 <body>
+  <div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading portfolio">
+    <div class="preloader-inner">
+      <div class="preloader-top">
+        <span class="preloader-brand"><b>Muhammad</b><span>Saad</span></span>
+        <span class="preloader-tag">Portfolio</span>
+      </div>
+
+      <div class="preloader-center">
+        <div class="preloader-cube-stage" aria-hidden="true">
+          <div class="preloader-cube">
+            <span class="face front"></span>
+            <span class="face back"></span>
+            <span class="face right"></span>
+            <span class="face left"></span>
+            <span class="face top"></span>
+            <span class="face bottom"></span>
+          </div>
+        </div>
+        <p class="preloader-caption" id="preloader-status">Initializing Automation Systems</p>
+      </div>
+
+      <div class="preloader-bottom">
+        <div class="preloader-meta">
+          <span>Business Automation &amp; Operations</span>
+          <span id="preloader-percent-label">00%</span>
+        </div>
+        <div class="preloader-track" aria-hidden="true">
+          <div class="preloader-fill" id="preloader-fill"></div>
+        </div>
+        <div class="preloader-count" id="preloader-count" aria-hidden="true">00</div>
+      </div>
+    </div>
+  </div>
+
   <header class="nav" id="main-nav">
     <a href="#hero" class="logo">
       <b>Muhammad</b><span>Saad</span>
@@ -1540,8 +1766,6 @@
         <span class="cta-line" aria-hidden="true"></span>
         <span class="count" id="hero-count" aria-hidden="true">06</span>
       </div>
-
-      <div class="loader" id="loader">Loading model</div>
     </div>
   </section>
 
@@ -1918,9 +2142,52 @@
     ];
     let currentSlide = 1;
 
+    /* ---------- Preloader controller ---------- */
+    const preloaderEl = document.getElementById('preloader');
+    const preloaderFillEl = document.getElementById('preloader-fill');
+    const preloaderCountEl = document.getElementById('preloader-count');
+    const preloaderPercentEl = document.getElementById('preloader-percent-label');
+    const preloaderStatusEl = document.getElementById('preloader-status');
+
+    let preloaderTarget = 22;
+    let preloaderCurrent = 0;
+    let cubeReady = false;
+    let fontsReady = false;
+    let preloaderClosed = false;
+    const preloaderStart = performance.now();
+
+    function closePreloader() {
+      if (preloaderClosed) return;
+      preloaderClosed = true;
+      preloaderEl.classList.add('is-done');
+    }
+
+    function stepPreloader() {
+      if (preloaderClosed) return;
+      const readyToComplete = (cubeReady && fontsReady) || performance.now() - preloaderStart > 2600;
+      if (readyToComplete) preloaderTarget = 100;
+
+      const diff = preloaderTarget - preloaderCurrent;
+      preloaderCurrent += Math.max(diff * 0.14, preloaderTarget > preloaderCurrent ? 0.8 : 0);
+      if (preloaderCurrent > 99.6 && preloaderTarget >= 100) preloaderCurrent = 100;
+
+      const display = Math.min(100, Math.round(preloaderCurrent));
+      const padded = display < 10 ? `0${display}` : String(display);
+      preloaderFillEl.style.width = `${display}%`;
+      preloaderCountEl.textContent = padded;
+      preloaderPercentEl.textContent = `${padded}%`;
+
+      if (display >= 100) {
+        preloaderStatusEl.textContent = 'System Ready';
+        setTimeout(closePreloader, 180);
+        return;
+      }
+      requestAnimationFrame(stepPreloader);
+    }
+    requestAnimationFrame(stepPreloader);
+
     /* ---------- Three.js setup ---------- */
     const canvas = document.getElementById('scene');
-    const loaderEl = document.getElementById('loader');
     const countEl = document.getElementById('hero-count');
 
     const renderer = new THREE.WebGLRenderer({
@@ -2147,7 +2414,9 @@
       }
       cubeMesh = new THREE.Mesh(normalizeGeometry(geom), frontMat);
       spinner.add(cubeMesh);
-      loaderEl.classList.add('done');
+      cubeReady = true;
+      preloaderTarget = Math.max(preloaderTarget, 86);
+      if (preloaderStatusEl) preloaderStatusEl.textContent = 'Refracting 3D Geometry';
     }
 
     function loadCubeModel() {
@@ -2181,7 +2450,12 @@
             setCubeGeometry(new RoundedBoxGeometry(1, 1, 1, 8, 0.12));
           }
         },
-        undefined,
+        (evt) => {
+          if (evt && evt.lengthComputable && evt.total > 0) {
+            const pct = 25 + Math.round((evt.loaded / evt.total) * 55);
+            preloaderTarget = Math.max(preloaderTarget, Math.min(82, pct));
+          }
+        },
         () => {
           setCubeGeometry(new RoundedBoxGeometry(1, 1, 1, 8, 0.12));
         }
@@ -2485,6 +2759,8 @@
       fontReadyPromise,
       new Promise((resolve) => setTimeout(resolve, 2500))
     ]).then(() => {
+      fontsReady = true;
+      preloaderTarget = Math.max(preloaderTarget, 94);
       drawHeadline();
     });
 
@@ -2881,6 +3157,15 @@
         copyEmailBtn.textContent = 'saadmuhammad679@gmail.com';
       }
     });
+  </script>
+  <script>
+    /* Fail-safe preloader dismiss if external module script stalls */
+    window.setTimeout(function () {
+      var p = document.getElementById('preloader');
+      if (p && !p.classList.contains('is-done')) {
+        p.classList.add('is-done');
+      }
+    }, 4500);
   </script>
 </body>
 </html>

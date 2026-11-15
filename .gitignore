@@ -9,3 +9,4 @@ coverage/
 *.local
 .env*
 !.env.example
+public/assets/aistudio/
