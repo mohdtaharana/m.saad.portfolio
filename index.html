@@ -182,26 +182,38 @@
       border: 0;
     }
 
-    /* NAV */
+    /* NAV (STICKY) */
     .nav {
-      position: absolute;
-      top: clamp(24px, 4.7vh, 40px);
-      left: var(--pad-x);
-      right: var(--pad-x);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 45;
+      padding: clamp(20px, 3.8vh, 34px) var(--pad-x);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background 0.25s ease, border-color 0.25s ease, padding 0.25s ease;
+    }
+
+    .nav.is-scrolled {
+      padding: 14px var(--pad-x);
+      background: rgba(0, 0, 0, 0.92);
+      border-bottom-color: rgba(255, 255, 255, 0.12);
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       color: #fff;
       text-decoration: none;
-      font-size: 16px;
-      letter-spacing: -0.01em;
+      font-size: clamp(20px, 2.2vw, 28px);
+      line-height: 1;
+      letter-spacing: -0.02em;
       white-space: nowrap;
       flex: none;
     }
@@ -645,12 +657,16 @@
 
     @media (max-width: 768px) {
       .nav {
-        top: 20px;
+        padding: 16px var(--pad-x);
+      }
+
+      .nav.is-scrolled {
+        padding: 12px var(--pad-x);
       }
 
       .logo {
-        font-size: 15px;
-        gap: 5px;
+        font-size: 20px;
+        gap: 6px;
       }
 
       .nav-right {
@@ -688,6 +704,10 @@
       position: relative;
       background: #000000;
       border-top: 1px solid var(--border);
+    }
+
+    section[id] {
+      scroll-margin-top: 76px;
     }
 
     .section {
@@ -1446,6 +1466,42 @@
   </style>
 </head>
 <body>
+  <header class="nav" id="main-nav">
+    <a href="#hero" class="logo">
+      <b>Muhammad</b><span>Saad</span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-talk">Let's Talk</a>
+    </div>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span class="menu-toggle-bars" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <ul class="mobile-menu-list">
+      <li><a href="#about" class="mobile-nav-link"><span>About</span><span class="mobile-menu-num">01</span></a></li>
+      <li><a href="#services" class="mobile-nav-link"><span>Services</span><span class="mobile-menu-num">02</span></a></li>
+      <li><a href="#projects" class="mobile-nav-link"><span>Projects</span><span class="mobile-menu-num">03</span></a></li>
+      <li><a href="#contact" class="mobile-nav-link"><span>Contact</span><span class="mobile-menu-num">04</span></a></li>
+    </ul>
+    <div class="mobile-menu-footer">
+      <a href="#contact" class="btn-solid mobile-nav-link" style="justify-content:center; width:100%;">Let's Talk</a>
+      <p class="mobile-menu-meta">
+        saadmuhammad679@gmail.com<br>
+        +92 334 3124811 &bull; Available for freelance, contract &amp; full-time roles
+      </p>
+    </div>
+  </div>
+
   <!-- ==================================================
        HERO SECTION (ROTATABLE 3D GLASS CUBOID)
        ================================================== -->
@@ -1453,42 +1509,6 @@
     <canvas id="scene" aria-label="Rotatable glass cube. Drag to rotate."></canvas>
     <div class="ui">
       <h1 class="sr-only">Muhammad Saad — Business Automation &amp; Operations Specialist</h1>
-
-      <header class="nav">
-        <a href="#hero" class="logo">
-          <b>Muhammad</b><span>Saad</span>
-        </a>
-        <div class="nav-right">
-          <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <a href="#contact" class="nav-talk">Let's Talk</a>
-        </div>
-        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
-          <span class="menu-toggle-bars" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </span>
-        </button>
-      </header>
-
-      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-        <ul class="mobile-menu-list">
-          <li><a href="#about" class="mobile-nav-link"><span>About</span><span class="mobile-menu-num">01</span></a></li>
-          <li><a href="#services" class="mobile-nav-link"><span>Services</span><span class="mobile-menu-num">02</span></a></li>
-          <li><a href="#projects" class="mobile-nav-link"><span>Projects</span><span class="mobile-menu-num">03</span></a></li>
-          <li><a href="#contact" class="mobile-nav-link"><span>Contact</span><span class="mobile-menu-num">04</span></a></li>
-        </ul>
-        <div class="mobile-menu-footer">
-          <a href="#contact" class="btn-solid mobile-nav-link" style="justify-content:center; width:100%;">Let's Talk</a>
-          <p class="mobile-menu-meta">
-            saadmuhammad679@gmail.com<br>
-            +92 334 3124811 &bull; Available for freelance, contract &amp; full-time roles
-          </p>
-        </div>
-      </div>
 
       <div class="arrows">
         <button class="arrow" id="prev" type="button" aria-label="Rotate cube left">
@@ -1639,12 +1659,12 @@
 
         <div class="stats-grid">
           <div class="stat-cell">
-            <div class="stat-value">1+</div>
-            <div class="stat-label">Year in Business Operations</div>
+            <div class="stat-value">1.5+</div>
+            <div class="stat-label">Years in Business Operations</div>
           </div>
           <div class="stat-cell">
-            <div class="stat-value">10+</div>
-            <div class="stat-label">Months in GHL Automation</div>
+            <div class="stat-value">1+</div>
+            <div class="stat-label">Year in GHL Automation</div>
           </div>
           <div class="stat-cell">
             <div class="stat-value">4</div>
@@ -2813,6 +2833,14 @@
         if (mobileMenu.classList.contains('open')) setMobileMenu(false);
       }
     });
+
+    /* Sticky navbar scroll state */
+    const mainNav = document.getElementById('main-nav');
+    function updateStickyNav() {
+      mainNav.classList.toggle('is-scrolled', window.scrollY > 24);
+    }
+    window.addEventListener('scroll', updateStickyNav, { passive: true });
+    updateStickyNav();
 
     /* Mobile hamburger menu toggle */
     const menuToggle = document.getElementById('menu-toggle');
